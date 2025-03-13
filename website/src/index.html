@@ -1,10 +1,66 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8" />
     <title>Fabi Kurse auf einen Blick</title>
   </head>
   <body>
-    <h1>Hello, World!</h1>
+    <h1>Fabi Kurse auf einen Blick</h1>
+    <table id="table" style="width: 100%">
+      <thead>
+        <tr>
+          <th>Titel</th>
+          <th>Ort</th>
+          <th>Startdatum</th>
+          <th>Plätze verfügbar?</th>
+          <th>Preis</th>
+        </tr>
+      </thead>
+    </table>
   </body>
+  <script type="module">
+    import DataTable from "datatables.net-dt";
+    import "npm:datatables.net-dt/css/dataTables.dataTables.min.css";
+
+    new DataTable("#table", {
+      paging: false,
+      ajax: {
+        url: "courses.json",
+        dataSrc: "",
+      },
+      columns: [
+        { data: "title" },
+        { data: "location" },
+        { data: "start" },
+        { data: "spotsleft" },
+        { data: "price" },
+      ],
+      initComplete: function () {
+        this.api()
+          .columns()
+          .every(function () {
+            let column = this;
+
+            // Create select element
+            let select = document.createElement("select");
+            select.add(new Option(""));
+            column.footer().replaceChildren(select);
+
+            // Apply listener for user change in value
+            select.addEventListener("change", function () {
+              column.search(select.value, { exact: true }).draw();
+            });
+
+            // Add list of options
+            column
+              .data()
+              .unique()
+              .sort()
+              .each(function (d, j) {
+                select.add(new Option(d));
+              });
+          });
+      },
+    });
+  </script>
 </html>

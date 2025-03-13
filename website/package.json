@@ -10,6 +10,11 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "parcel": "^2.13.3"
+    "parcel": "^2.13.3",
+    "parcel-reporter-static-files-copy": "^1.5.3"
+  },
+  "dependencies": {
+    "datatables.net-dt": "^2.2.2",
+    "jquery": "^3.7.1"
   }
 }
