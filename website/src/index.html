@@ -1,12 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
   <head>
     <meta charset="utf-8" />
     <title>Fabi Kurse auf einen Blick</title>
+    <link rel="stylesheet" href="npm:simpledotcss/simple.min.css" />
+    <link
+      rel="stylesheet"
+      href="npm:datatables.net-dt/css/dataTables.dataTables.min.css"
+    />
   </head>
   <body>
     <h1>Fabi Kurse auf einen Blick</h1>
-    <table id="table" style="width: 100%">
+    <table id="table" class="display" style="width: 100%">
       <thead>
         <tr>
           <th>Titel</th>
@@ -20,13 +25,15 @@
   </body>
   <script type="module">
     import DataTable from "datatables.net-dt";
-    import "npm:datatables.net-dt/css/dataTables.dataTables.min.css";
 
     new DataTable("#table", {
       paging: false,
       ajax: {
         url: "courses.json",
         dataSrc: "",
+      },
+      oLanguage: {
+        sSearch: "Suchen:",
       },
       columns: [
         { data: "title" },
@@ -39,12 +46,14 @@
         this.api()
           .columns()
           .every(function () {
-            let column = this;
+            const column = this;
 
             // Create select element
-            let select = document.createElement("select");
-            select.add(new Option(""));
-            column.footer().replaceChildren(select);
+            const select = document.createElement("select");
+            select.style.width = "100%";
+
+            select.add(new Option("Filtern..."));
+            column.header().appendChild(select);
 
             // Apply listener for user change in value
             select.addEventListener("change", function () {

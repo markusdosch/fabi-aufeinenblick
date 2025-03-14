@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "datatables.net-dt": "^2.2.2",
-    "jquery": "^3.7.1"
+    "jquery": "^3.7.1",
+    "simpledotcss": "^2.3.4"
   }
 }
