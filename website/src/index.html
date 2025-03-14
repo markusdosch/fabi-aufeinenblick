@@ -25,6 +25,7 @@
   </body>
   <script type="module">
     import DataTable from "datatables.net-dt";
+    import $ from "jquery";
 
     new DataTable("#table", {
       paging: false,
@@ -36,7 +37,18 @@
         sSearch: "Suchen:",
       },
       columns: [
-        { data: "title" },
+        {
+          data: "title",
+          fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
+            $(nTd).html(
+              "<a target='_blank' rel='noopener' href='" +
+                oData.url +
+                "'>" +
+                oData.title +
+                "</a>"
+            );
+          },
+        },
         { data: "location" },
         { data: "start" },
         { data: "spotsleft" },
