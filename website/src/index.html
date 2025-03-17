@@ -3,7 +3,6 @@
   <head>
     <meta charset="utf-8" />
     <title>Fabi Kurse auf einen Blick</title>
-    <link rel="stylesheet" href="npm:simpledotcss/simple.min.css" />
     <link
       rel="stylesheet"
       href="npm:datatables.net-dt/css/dataTables.dataTables.min.css"
@@ -16,7 +15,8 @@
       <thead>
         <tr>
           <th>Titel</th>
-          <th>Ort</th>
+          <th>Standort</th>
+          <th>Wochentag</th>
           <th>Startdatum</th>
           <th>Plätze verfügbar?</th>
           <th>Preis</th>
@@ -30,6 +30,17 @@
 
     new DataTable("#table", {
       paging: false,
+      language: {
+        infoFiltered: " - gefiltert aus _MAX_ Einträgen",
+        infoEmpty: "Kein Ergebnis",
+      },
+      layout: {
+        topStart: {
+          info: {
+            text: "_TOTAL_ Einträge",
+          },
+        },
+      },
       ajax: {
         url: "courses.json",
         dataSrc: "",
@@ -50,9 +61,26 @@
             );
           },
         },
-        { data: "location" },
+        {
+          data: "location",
+          fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
+            $(nTd).html(
+              "<span title='" +
+                oData.location_exact +
+                "'>" +
+                oData.location +
+                "</span>"
+            );
+          },
+        },
+        { data: "start_weekday" },
         { data: "start" },
-        { data: "spotsleft" },
+        {
+          data: "spots_left",
+          fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
+            $(nTd).html(oData.spots_left ? "✅" : "❌");
+          },
+        },
         { data: "price" },
       ],
       initComplete: function () {
