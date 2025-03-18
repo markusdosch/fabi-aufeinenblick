@@ -1,7 +1,6 @@
 {
   "name": "website",
   "version": "1.0.0",
-  "main": "index.js",
   "scripts": {
     "build": "npx parcel build './src/*.html'"
   },
