@@ -31,7 +31,7 @@ class FabiMuenchenSpider(scrapy.Spider):
 
             # TODO: Kategorie (via URL?!), z.B. "Fit mit Fabi"
 
-            spotsleft =  True if "btn-success" in entry.css(".row > div:nth-child(2) > p > a::attr(class)").get() else False
+            spotsleft =  "✅" if "btn-success" in entry.css(".row > div:nth-child(2) > p > a::attr(class)").get() else "❌"
 
             yield {
                 "title": title,
