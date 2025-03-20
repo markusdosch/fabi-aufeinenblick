@@ -126,7 +126,7 @@
             select.add(new Option("Filtern...", ""));
             column.header().appendChild(select);
 
-            select.addEventListener("click", (e) => e.cancelBubble());
+            select.addEventListener("click", (e) => e.stopPropagation());
 
             // Apply listener for user change in value
             select.addEventListener("change", function () {
