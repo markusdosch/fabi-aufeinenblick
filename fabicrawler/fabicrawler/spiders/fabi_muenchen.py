@@ -1,4 +1,5 @@
 import scrapy
+import re
 from datetime import datetime
 
 category_pattern = r"https://www\.fabi-muenchen\.de/programm/([^/]+)"
