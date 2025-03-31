@@ -21,8 +21,9 @@ jobs:
         with:
           python-version-file: "fabicrawler/.python-version"
       - name: Fetch latest data
+        working-directory: ./fabicrawler
         run: |-
-          uv run -- scrapy crawl fabi-muenchen -O website/static/courses.json
+          uv run -- scrapy crawl fabi-muenchen -O ../website/static/courses.json
       - name: Commit and push if it changed
         run: |-
           git config user.name "Automated"
