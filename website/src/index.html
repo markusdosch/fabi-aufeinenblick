@@ -61,7 +61,7 @@
     import $ from "jquery";
 
     new DataTable("#table", {
-      order: [[3, "asc"]], // column number is 0-based
+      order: [[4, "asc"]], // column number is 0-based
       paging: false,
       language: {
         infoFiltered: " - gefiltert aus _MAX_ Einträgen",
@@ -96,6 +96,7 @@
           },
           width: "50%",
         },
+        { data: "category" },
         {
           data: "location",
           fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {

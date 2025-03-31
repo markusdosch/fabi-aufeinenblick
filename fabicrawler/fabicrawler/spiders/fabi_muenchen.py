@@ -1,6 +1,8 @@
 import scrapy
 from datetime import datetime
 
+category_pattern = r"https://www\.fabi-muenchen\.de/programm/([^/]+)"
+
 
 class FabiMuenchenSpider(scrapy.Spider):
     name = "fabi-muenchen"
@@ -29,12 +31,17 @@ class FabiMuenchenSpider(scrapy.Spider):
 
             price = entry.css(".row > div:nth-child(1) > .row:nth-child(4) > div:nth-child(2)::text").get().strip()
 
-            # TODO: Kategorie (via URL?!), z.B. "Fit mit Fabi"
+            category_match = re.search(category_pattern, url)
+
+            category="?"
+            if category_match:
+                category = category_match.group(1)
 
             spotsleft =  "✅" if "btn-success" in entry.css(".row > div:nth-child(2) > p > a::attr(class)").get() else "❌"
 
             yield {
                 "title": title,
+                "category": category,
                 "url": url,
                 "start_weekday": start["weekday"],
                 "start": start_date.isoformat() + ", " + start["timerange"],
