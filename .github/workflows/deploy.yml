@@ -16,7 +16,7 @@ jobs:
       - run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
         working-directory: ./website
         id: nvm
-      - run: echo ::set-output name=COURSES_LAST_CHANGED::$(git log -1 --pretty='format:%cd' --date=format:'%Y-%m-%d %H:%M' ./static/courses.json)
+      - run: echo ::set-output name=COURSES_LAST_CHANGED::$(git log -1 --pretty='format:%cd' --date=format:'%Y-%m-%d, %H:%M' ./static/courses.json)
         working-directory: ./website
         id: courses
       - name: Setup Node
@@ -45,8 +45,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     needs: build
     permissions:
-      pages: write      # to deploy to Pages
-      id-token: write   # to verify the deployment originates from an appropriate source
+      pages: write # to deploy to Pages
+      id-token: write # to verify the deployment originates from an appropriate source
     runs-on: ubuntu-latest
     name: Deploy
     steps:
