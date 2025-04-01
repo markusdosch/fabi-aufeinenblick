@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Check out this repo
         uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.FABI_REPO_PAT }}
       - name: Install the latest version of uv
         uses: astral-sh/setup-uv@v5
         with:
