@@ -67,9 +67,8 @@
 
     document.addEventListener("DOMContentLoaded", () => {
       if (process.env.COURSES_LAST_CHANGED) {
-        const d = new Date(process.env.COURSES_LAST_CHANGED);
         document.querySelector("#coursesLastChanged").textContent =
-          d.toLocaleString("de-DE", { timeZone: "Europe/Berlin" });
+          formatDateBerlinTimezone(new Date(process.env.COURSES_LAST_CHANGED));
       }
     });
 
@@ -158,5 +157,30 @@
           });
       },
     });
+
+    function formatDateBerlinTimezone(date = new Date()) {
+      // Options for toLocaleString to convert to Europe/Berlin timezone
+      const options = {
+        timeZone: "Europe/Berlin",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      };
+
+      // Format the date string using toLocaleString
+      const berlinDateString = date.toLocaleString("en-GB", options);
+
+      // Convert from "DD/MM/YYYY, HH:MM" to "YYYY-MM-DD, HH:MM"
+      const parts = berlinDateString.split(", ");
+      const dateParts = parts[0].split("/");
+
+      // Rearrange to YYYY-MM-DD format
+      const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+
+      return `${formattedDate}, ${parts[1]}`;
+    }
   </script>
 </html>
