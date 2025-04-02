@@ -47,6 +47,18 @@
       Die Liste wird täglich automatisch aktualisiert. Zuletzt:
       <span id="coursesLastChanged">?</span>
     </h5>
+    <div>
+      <div>
+        <input type="checkbox" id="start-due-toggle" checked />
+        <label for="start-due-toggle"
+          >Kurse mit Startdatum in der Vergangenheit ausblenden</label
+        >
+      </div>
+      <div>
+        <input type="checkbox" id="all-taken-toggle" checked />
+        <label for="all-taken-toggle">Kurse ohne freie Plätze ausblenden</label>
+      </div>
+    </div>
     <table id="table" class="display full-width" style="width: 100vw">
       <thead>
         <tr>
@@ -71,7 +83,7 @@
       }
     });
 
-    new DataTable("#table", {
+    const table = new DataTable("#table", {
       order: [[4, "asc"]], // column number is 0-based
       paging: false,
       language: {
@@ -121,14 +133,22 @@
           },
         },
         { data: "start_weekday" },
-        { data: "start" },
-        { data: "spots_left" },
+        { data: "start", name: "start" },
+        { data: "spots_left", name: "spots_left" },
       ],
       initComplete: function () {
         this.api()
           .columns()
           .every(function () {
             const column = this;
+
+            if (column.title() === "Startdatum") {
+              return;
+            }
+
+            if (column.title() === "Plätze frei?") {
+              return;
+            }
 
             // Create select element
             const select = document.createElement("select");
@@ -153,8 +173,58 @@
                 select.add(new Option(d));
               });
           });
+
+        // TODO: Clean up code a bit - this search-code overlaps with the checkbox onchange listener code
+        const todayInBerlin = formatDateBerlinTimezone().split(", ")[0];
+        table
+          .column("start:name")
+          .search((input, rowData, rowDataIndex, columnDataIndex) => {
+            return todayInBerlin <= rowData.start;
+          })
+          .draw();
+        table
+          .column("spots_left:name")
+          .search((input, rowData, rowDataIndex, columnDataIndex) => {
+            return rowData.spots_left === "✅";
+          })
+          .draw();
       },
     });
+
+    document
+      .querySelector("#start-due-toggle")
+      .addEventListener("change", (e) => {
+        if (!e.target.checked) {
+          // Reset search on column
+          table.column("start:name").search("").draw();
+          return;
+        }
+
+        const todayInBerlin = formatDateBerlinTimezone().split(", ")[0];
+        table
+          .column("start:name")
+          .search((input, rowData, rowDataIndex, columnDataIndex) => {
+            return todayInBerlin <= rowData.start;
+          })
+          .draw();
+      });
+
+    document
+      .querySelector("#all-taken-toggle")
+      .addEventListener("change", (e) => {
+        if (!e.target.checked) {
+          // Reset search on column
+          table.column("spots_left:name").search("").draw();
+          return;
+        }
+
+        table
+          .column("spots_left:name")
+          .search((input, rowData, rowDataIndex, columnDataIndex) => {
+            return rowData.spots_left === "✅";
+          })
+          .draw();
+      });
 
     function formatDateBerlinTimezone(date = new Date()) {
       // Options for toLocaleString to convert to Europe/Berlin timezone
