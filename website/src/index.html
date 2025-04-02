@@ -67,8 +67,9 @@
 
     document.addEventListener("DOMContentLoaded", () => {
       if (process.env.COURSES_LAST_CHANGED) {
+        const d = new Date(process.env.COURSES_LAST_CHANGED);
         document.querySelector("#coursesLastChanged").textContent =
-          process.env.COURSES_LAST_CHANGED;
+          d.toLocaleString("de-DE", { timeZone: "Europe/Berlin" });
       }
     });
 
