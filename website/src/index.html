@@ -189,6 +189,10 @@
           .columns()
           .every(function () {
             const column = this;
+            
+            if (column.title() === "Titel") {
+              return;
+            }
 
             if (column.title() === "Startdatum") {
               return;
