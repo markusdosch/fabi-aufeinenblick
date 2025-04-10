@@ -1,8 +1,0 @@
-{
-    "scripts": {
-        "heroku-postbuild": "cd website && npm install && npm run build"
-    },
-    "engines": {
-        "node": "22.x"
-    }
-}
