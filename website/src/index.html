@@ -8,6 +8,7 @@
       rel="stylesheet"
       href="npm:datatables.net-dt/css/dataTables.dataTables.min.css"
     />
+    <link rel="stylesheet" href="npm:chosen-js/chosen.min.css" />
     <style>
       /* START via https://news.ycombinator.com/item?id=32972768 */
       html {
@@ -120,9 +121,10 @@
       </a>
     </div>
   </body>
+  <script src="npm:jquery/dist/jquery.min.js"></script>
   <script type="module">
     import DataTable from "datatables.net-dt";
-    import $ from "jquery";
+    import chosen from "chosen-js";
 
     document.addEventListener("DOMContentLoaded", () => {
       if (process.env.COURSES_LAST_CHANGED) {
@@ -189,7 +191,7 @@
           .columns()
           .every(function () {
             const column = this;
-            
+
             if (column.title() === "Titel") {
               return;
             }
@@ -206,14 +208,21 @@
             const select = document.createElement("select");
             select.style.width = "100%";
 
-            select.add(new Option("Filtern...", ""));
+            select.multiple = true;
+            select.dataset.placeholder = "Filtern...";
+
             column.header().appendChild(select);
 
             select.addEventListener("click", (e) => e.stopPropagation());
 
             // Apply listener for user change in value
             select.addEventListener("change", function () {
-              column.search(select.value, { exact: true }).draw();
+              const values = Array.from(select.selectedOptions).map(
+                ({ value }) => value
+              );
+
+              const TREAT_AS_REGEX = true;
+              column.search(values.join("|"), TREAT_AS_REGEX).draw();
             });
 
             // Add list of options
@@ -224,6 +233,8 @@
               .each(function (d, j) {
                 select.add(new Option(d));
               });
+
+            $(select).chosen();
           });
 
         // TODO: Clean up code a bit - this search-code overlaps with the checkbox onchange listener code
