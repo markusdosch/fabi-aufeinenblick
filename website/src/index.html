@@ -8,6 +8,7 @@
       rel="stylesheet"
       href="npm:datatables.net-dt/css/dataTables.dataTables.min.css"
     />
+    <link href="npm:tom-select/dist/css/tom-select.css" rel="stylesheet" />
     <style>
       /* START via https://news.ycombinator.com/item?id=32972768 */
       html {
@@ -123,6 +124,7 @@
   <script src="npm:jquery/dist/jquery.min.js"></script>
   <script type="module">
     import DataTable from "datatables.net-dt";
+    import TomSelect from "tom-select";
 
     document.addEventListener("DOMContentLoaded", () => {
       if (process.env.COURSES_LAST_CHANGED) {
@@ -247,6 +249,27 @@
                 .each(function (d, j) {
                   select.add(new Option(d));
                 });
+            }
+
+            // via https://stackoverflow.com/a/29509267
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(
+              navigator.userAgent
+            );
+
+            if (!isMobile) {
+              // on mobile, the system multi-select is pretty good.
+              new TomSelect(select, {
+                hidePlaceholder: true,
+                plugins: {
+                  remove_button: {
+                    title: "Option entfernen",
+                  },
+                  clear_button: {
+                    title: "Alle Optionen entfernen",
+                  },
+                  no_active_items: true,
+                },
+              });
             }
           });
 
