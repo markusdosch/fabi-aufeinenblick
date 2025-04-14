@@ -76,7 +76,7 @@
     </h5>
     <div>
       <div>
-        <input type="checkbox" id="start-due-toggle" checked />
+        <input type="checkbox" id="start-due-toggle" />
         <label for="start-due-toggle"
           >Nur Kurse mit Startdatum in der Zukunft</label
         >
@@ -274,17 +274,10 @@
           });
 
         // TODO: Clean up code a bit - this search-code overlaps with the checkbox onchange listener code
-        const todayInBerlin = formatDateBerlinTimezone().split(", ")[0];
-        table
-          .column("start:name")
-          .search((input, rowData, rowDataIndex, columnDataIndex) => {
-            return todayInBerlin <= rowData.start;
-          })
-          .draw();
         table
           .column("spots_left:name")
           .search((input, rowData, rowDataIndex, columnDataIndex) => {
-            return rowData.spots_left === "✅";
+            return rowData.spots_left !== "❌";
           })
           .draw();
       },
@@ -320,7 +313,7 @@
         table
           .column("spots_left:name")
           .search((input, rowData, rowDataIndex, columnDataIndex) => {
-            return rowData.spots_left === "✅";
+            return rowData.spots_left !== "❌";
           })
           .draw();
       });

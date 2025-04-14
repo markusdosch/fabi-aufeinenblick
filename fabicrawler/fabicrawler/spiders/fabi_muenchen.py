@@ -39,6 +39,10 @@ class FabiMuenchenSpider(scrapy.Spider):
                 category = category_match.group(1)
 
             spotsleft =  "✅" if "btn-success" in entry.css(".row > div:nth-child(2) > p > a::attr(class)").get() else "❌"
+            if "offener Treff" in title:
+                spotsleft = "☀️"
+
+            signup_required = False if "offener Treff" in title else True
 
             yield {
                 "title": title,
@@ -49,7 +53,8 @@ class FabiMuenchenSpider(scrapy.Spider):
                 "location": location,
                 "location_exact": location_exact,
                 "price": price,
-                "spots_left": spotsleft
+                "spots_left": spotsleft,
+                "signup_required": signup_required
             }
         
         next_page = response.css(".hauptseite_kurse > div > div.kw-paginationleiste.clearfix > div.text-center.kw-pages > ul > li.active.disabled + li > a::attr(href)").get()
