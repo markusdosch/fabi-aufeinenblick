@@ -90,10 +90,10 @@
       <thead>
         <tr>
           <th>Titel</th>
+          <th>Startdatum</th>
+          <th>Wochentag</th>
           <th>Kategorie</th>
           <th>Standort</th>
-          <th>Wochentag</th>
-          <th>Startdatum</th>
           <th>Plätze frei?</th>
         </tr>
       </thead>
@@ -103,7 +103,7 @@
         display: flex;
         justify-content: center;
         width: 100%;
-        marin-top: 1em;
+        margin-top: 1em;
       "
     >
       <a
@@ -169,6 +169,8 @@
           },
           width: "50%",
         },
+        { data: "start", name: "start" },
+        { data: "start_weekday" },
         { data: "category" },
         {
           data: "location",
@@ -182,8 +184,6 @@
             );
           },
         },
-        { data: "start_weekday" },
-        { data: "start", name: "start" },
         { data: "spots_left", name: "spots_left" },
       ],
       initComplete: function () {
@@ -211,7 +211,10 @@
             select.multiple = true;
             select.dataset.placeholder = "Filtern...";
 
-            column.header().appendChild(select);
+            const div = document.createElement("div");
+            div.appendChild(select);
+
+            column.header().appendChild(div);
 
             select.addEventListener("click", (e) => e.stopPropagation());
 
