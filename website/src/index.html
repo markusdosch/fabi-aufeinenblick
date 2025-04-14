@@ -8,7 +8,6 @@
       rel="stylesheet"
       href="npm:datatables.net-dt/css/dataTables.dataTables.min.css"
     />
-    <link rel="stylesheet" href="npm:chosen-js/chosen.min.css" />
     <style>
       /* START via https://news.ycombinator.com/item?id=32972768 */
       html {
@@ -124,7 +123,6 @@
   <script src="npm:jquery/dist/jquery.min.js"></script>
   <script type="module">
     import DataTable from "datatables.net-dt";
-    import chosen from "chosen-js";
 
     document.addEventListener("DOMContentLoaded", () => {
       if (process.env.COURSES_LAST_CHANGED) {
@@ -228,16 +226,28 @@
               column.search(values.join("|"), TREAT_AS_REGEX).draw();
             });
 
-            // Add list of options
-            column
-              .data()
-              .unique()
-              .sort()
-              .each(function (d, j) {
-                select.add(new Option(d));
-              });
+            const daysOrder = ["Mo.", "Di.", "Mi.", "Do.", "Fr.", "Sa.", "So."];
 
-            $(select).chosen();
+            // Add list of options
+            if (column.title() === "Wochentag") {
+              column
+                .data()
+                .unique()
+                .sort((val1, val2) => {
+                  return daysOrder.indexOf(val1) > daysOrder.indexOf(val2);
+                })
+                .each(function (d, j) {
+                  select.add(new Option(d));
+                });
+            } else {
+              column
+                .data()
+                .unique()
+                .sort()
+                .each(function (d, j) {
+                  select.add(new Option(d));
+                });
+            }
           });
 
         // TODO: Clean up code a bit - this search-code overlaps with the checkbox onchange listener code
